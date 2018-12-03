@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" >
+    <meta name="renderer" content="webkit">
+      <style>
+        html,
+        body {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          border: 0;
+          overflow: hidden;
+        }
+    
+        .video-player-bac{
+          background-color: #232325;
+          align-content: center;
+          justify-content: center;
+          color: #fff;
+          font-size: 14px;
+          text-align: center;
+          position: relative;
+        }
+        .video-player-no-content{
+          line-height: 20px;
+          text-align: center;
+          position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            margin: auto;
+        }
+    
+    
+    
+        .video-no-browser {
+          width: 100%;
+          height: 100%;
+          display: none;
+        }
+    
+        .video-no-control {
+          width: 100%;
+          height: 100%;
+          display: none;
+          box-sizing: content-box;
+        }
+    
+        .video-player-conter {
+          width: 100%;
+          height: 100%;
+    
+          /* display: none; */
+    
+        }
+    
+        .plugin {
+          width: 100%;
+          height: calc(100% - 70px);
+          background-color: #232325;
+          /* border: 1px solid black; */
+        }
+    
+        .player-header {
+          width: 100%;
+          height: 30px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          /* border: 1px solid red; */
+          background: #3a3939;
+          font-size: 14px;
+          color: #fff;
+          padding: 0 10px;
+          box-sizing: border-box;
+    
+        }
+        .player-header .player-header-success{
+          width: 100%;
+          color: #0EBBD5;
+          animation: player_header_success_a .3s
+        }
+        @keyframes player_header_success_a{
+          0%{
+            transform: translateY(-30px);
+            opacity: 0;
+          }
+          100%{
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+    
+    
+        .player-header div {
+          overflow: hidden;
+          width: 50%;
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space: nowrap;
+        }
+        .player-header-address{
+          text-align: left;
+        }
+    
+        .player-header-company{
+          text-align: right;
+        }
+    
+        .player-control {
+          width: 100%;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #3a3939;
+          padding: 0 10px;
+          box-sizing: border-box;
+          /* border: 1px solid red; */
+        }
+    
+        .player-header-time {
+          /* width: 200px;
+          flex: none;
+          flex-wrap: nowrap;
+          word-wrap: normal; */
+        }
+    
+        .player-header-address {
+          flex: none;
+          word-wrap: normal;
+    
+        }
+    
+        .player-header-company {
+          flex: auto;
+        }
+    
+        .player-control .player-control-left {
+          display: flex;
+          align-items: center;
+          text-align: left;
+        }
+    
+        .player-control .player-control-right {
+          display: flex;
+          align-items: center;
+          text-align: right;
+        }
+    
+        .iconfont{
+          font-size: 20px !important;
+          display: inline-flex;
+          width: 30px;
+          color: #fff;
+          cursor: pointer;
+          width: 30px;
+          text-align: center;
+          display: flex;
+        }
+        .iconfontuse:hover{
+          color: #149dfa;
+        }
+        .video-content-btn-jingyin{
+          display: none;
+        }
+        .video-content-btn-stop{
+          display: none;
+        }
+        #video-content{
+          position: relative;
+        }
+        #video-content .address{
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          background: rgba(255, 255, 255,0.5);
+          margin-bottom: 1.7rem; 
+          padding: 0 0.3rem;
+          color: #333;
+          line-height: 1.90666667rem;
+          height: 1.90666667rem;
+        }
+    
+        .iconfontnouse{
+          color: #aaa;
+        }
+    
+    
+        .button {
+          cursor: pointer;
+          border-radius: 20%;
+          -webkit-touch-callout: none;
+          /* iOS Safari */
+          -webkit-user-select: none;
+          /* Chrome/Safari/Opera */
+          -khtml-user-select: none;
+          /* Konqueror */
+          -moz-user-select: none;
+          /* Firefox */
+          -ms-user-select: none;
+          /* Internet Explorer/Edge */
+          user-select: none;
+          /* Non-prefixed version, currently*/
+    
+        }
+      </style>
+      <style>
+        .yingshi-video{
+          width: 100%;
+          height: 100%;
+        }
+        .plugin{
+          height: calc(100% - 30px);
+        }
+        #divPlugin{
+          height: 100%;
+        }
+      </style>
+</head>
+<body>
+<script src="https://open.ys7.com/sdk/js/1.3/ezuikit.js"></script>
+<div id="video-content" class="video-player-conter">
+  <!-- <div class="address">
+    一楼大厅2005
+  </div> -->
+  <div id="divPlugin" class="plugin">
+    <video id="yingshi_video" class="yingshi-video" poster="" controls playsInline webkit-playsinline autoplay>
+      <source class="source-one" src=""
+        type="" />
+      <source class="source-two" src=""
+        type="application/x-mpegURL" />
+    </video>
+  </div>
+</div>
+<script src="./cyberplayer.js"></script>
+<script>
+  var thisPlayer = null;
+  var video_options = null;
+  var windowSize = {
+    width: 50,
+    height: 30,
+  }
+  function video_init(options, vue) {
+    video_options = options;
+    // parentVue = vue;
+    window.setTimeout(_player_init, 200);
+  }
+  /**
+   * 页面初始化
+   **/
+  function _player_init() {
+    windowSize.width = document.querySelector('html').clientWidth;
+    windowSize.height = document.querySelector('html').clientHeight;
+    // cyberplayer("divPlugin").setup({
+    //     width: windowSize.width,
+    //     height: windowSize.height,
+    //     file: video_options.rtmp_url, // <—rtmp or flv直播地址
+    //     fallbackfile: video_options.hls_url, // <— 备用播放地址，为了手机上能进行直播，设置hls直播流
+    //     autostart: true,
+    //     stretching: "uniform",
+    //     volume: 0,
+    //     controls: 'none',
+    //     ak: "0b8c404eb4214958b074287a1687be32" // 公有云平台注册即可获得accessKey
+    // });
+    
+    // var yingshi_video = document.getElementById('yingshi_video');
+    
+    // source1.src = 'rtmp://rtmp.open.ys7.com/openlive/f01018a141094b7fa138b9d0b856507b';
+    // source2.src = 'http://hls.open.ys7.com/openlive/f01018a141094b7fa138b9d0b856507b.m3u8';
+    
+      
+    // // source1.src = video_options.rtmp_url;
+    // // source2.src = video_options.hls_url;
+    var u = navigator.userAgent, app = navigator.appVersion;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
+    var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    
+    
+    if (isAndroid) {
+      document.getElementById('divPlugin').innerHTML = "";
+      document.getElementById('divPlugin').innerHTML = " <video id='yingshi_video' class='yingshi-video' poster=' controls playsInline webkit-playsinline autoplay> <source class='source-one' src='"+ video_options.rtmp_url +"' type='' /> <source class='source-two' src='"+ video_options.hls_url +"' type='application/x-mpegURL' /> </video>"
+
+      thisPlayer = new EZUIPlayer('yingshi_video');
+      video_play();
+    } else {
+      var source1 = document.getElementById('yingshi_video').getElementsByClassName('source-one')[0];
+      var source2 = document.getElementById('yingshi_video').getElementsByClassName('source-two')[0];
+      source1.src = video_options.rtmp_url;
+      source2.src = video_options.hls_url;
+      thisPlayer = new EZUIPlayer('yingshi_video');
+    }
+    
+    console.log(video_options.rtmp_url,video_options.hls_url)
+  }
+  function video_play() {
+    thisPlayer.play();
+  }
+</script>
+</body>
+</html>
+
+<!-- guowei@fubangyun.com -->
